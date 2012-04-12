@@ -75,32 +75,15 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   drupal_add_js($path . '/js/receipt.js');
   // drupal_add_js($path . '/js/highcharts.src.js');
   // drupal_add_js($path . '/js/chart.js');
-
   drupal_add_css($path . '/css/receipt.css');
   drupal_add_css($path . 'css/receipt-print.css');
 
   // Get tax receipt line items from taxreceipt node, field_taxreceipt_line_item field.
   $node = $variables['node'];
-  $line_items = array();
-  foreach ($node->field_taxreceipt_line_item as $line_item) {
-
-    // Convert line item string to an array.
-    $line_item = _taxreceipt_process_line_item(trim(check_plain($line_item['value'])));
-    // If it's a subcategory, store it under its parent.
-    $machine_name = array_pop(array_keys($line_item));
-    if ($line_item[$machine_name]['is_subcategory']) {
-      $parent = $line_item[$machine_name]['parent'];
-      $line_items[$parent]['subcategories'][$machine_name] = $line_item[$machine_name];
-    }
-    else {
-      $line_items += $line_item;
-    }
-
-  }
+  $line_items = _taxreceipt_process_line_items($node);
 
   // Surface these variables in taxreceipt.tpl.php:
   $variables['line_items'] = $line_items;
-
 }
 
 /**
@@ -115,6 +98,35 @@ function taxreceipt_preprocess_taxreceipt($variables) {
 function taxreceipt_line_item_is_subcategory($line_item) {
   $is_subcategory = (substr($line_item, 0, 1) == '*') ? TRUE : FALSE; 
   return $is_subcategory;
+}
+
+/**
+ * Pull line items out of $node object and organize into a more useful array.
+ * 
+ * @param $node
+ *  Object.
+ * 
+ * @return $line_items
+ *  Associative array.
+ */
+function _taxreceipt_process_line_items($node) {
+  $line_items = array();
+  foreach ($node->field_taxreceipt_line_item as $line_item) {
+
+    // Convert line item string to an array.
+    $line_item = _taxreceipt_process_line_item(trim(check_plain($line_item['value'])));
+    // If it's a subcategory, store it under its parent.
+    $machine_name = array_pop(array_keys($line_item));
+    if ($line_item[$machine_name]['is_subcategory']) {
+      $parent = $line_item[$machine_name]['parent'];
+      $line_items[$parent]['subcategories'][$machine_name] = $line_item[$machine_name];
+    }
+    else {
+      $line_items += $line_item;
+    }
+  }
+
+  return $line_items;
 }
 
 /**
