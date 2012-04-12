@@ -12,7 +12,7 @@
  *  - $db_is_active
  *  - $zebra
  *
- *  - $form, taxreceipt_payment_form
+ *  - $payment_form, taxreceipt_payment_form
  * 
  *  - $taxpayer_stories, array including:
  *     $taxpayer_stories[$machine_name]['title'] = '$80,000 income — married with two children';
@@ -132,44 +132,12 @@
   <div class="subtitle">Understand how and where your tax dollars are being spent</div>
 </div>
 
-<?php print $form; ?>
 
 <div id="taxr-tabset">
 	<div id="taxr-calculate" class="taxr-tab">
-		<div id="taxr-calculate-form-top">
-			<div id="taxr-calculate-form">
-			  <div class="taxr-instructions">Enter your 2011 payments below or select an estimate from the drop down menu</div>
-				<div id="taxr-error-numeric">There is an error with one of your inputs &mdash; please only use positive, numeric values (0-9) </div>
-				<div id="taxr-input" class="input-1">
-					<label>Social Security Tax</label>
-					<input name="taxr-input-socsec" value="Enter Dollar Amount">
-					<a href="javascript:;" id="taxr-info-btn-socsec" title="Please enter the amount of Social Security taxes you paid in 2011. You can generally find this information on the Form W-2 your employer sent you, in box 4, labeled 'Social security tax withheld.'"></a>
-				</div>
-				<div id="taxr-input" class="input-2">
-					<label>Medicare Tax</label>
-					<input name="taxr-input-medicare" value="Enter Dollar Amount">
-					<a href="javascript:;" id="taxr-info-btn-medicare" title="Please enter the amount of Medicare taxes you paid in 2011. You can generally find this information on the Form W-2 your employer sent you, in box 6, labeled 'Medicare tax withheld.'"></a>
-				</div>
-				<div id="taxr-input" class="input-3">
-					<label>Income Tax</label>
-					<input name="taxr-input-income" value="Enter Dollar Amount">
-					<a href="javascript:;" id="taxr-info-btn-income" title="Please enter the amount of your income tax liability for 2011.  This is not the additional amount you owe (if any) on April 15 but rather the whole amount of federal income taxes for 2011: amounts already withheld from your paycheck during 2011 plus any additional amount paid on April 15 or minus any refund you applied for on April 15.  You can generally find this total figure in your income tax return, line 11 of Form 1040EZ or line 55 of Form 1040."></a>
-				</div>
-				<div id="taxr-calculate-button"></div>
-				<div class="taxr-income-instr">Don't have your tax information handy?</div>		
-			</div>
-		</div>
-		<div id="taxr-calculate-range-container"> 
-			<div id="taxr-range-row" class="clearfix">
-				<div id="taxr-range-toggle"></div>
-			</div>
 
-			<div id="taxr-range-select">
+    <?php print theme('taxreceipt_payment', NULL); ?>
 
-          <?php foreach ($taxpayer_stories as $taxpayer_story) { print theme('taxreceipt_taxpayer_story', $taxpayer_story); } ?> 
-
-			</div>
-		</div>
 		<div class="taxr-top-row-first">
 			<div id="taxr-bluea">PROGRAMS & SERVICES</div><div id="taxr-blueb">YOUR TAX PAYMENT</div>
 		</div>

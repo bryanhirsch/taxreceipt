@@ -79,6 +79,10 @@ function taxreceipt_theme() {
       'arguments' => array('taxpayer_story' => NULL),
       'template' => 'taxreceipt-taxpayer-story',
     ), 
+    'taxreceipt_payment' => array(
+      'arguments' => array('form' => NULL),
+      // 'template' => 'taxreceipt-payment',
+    ), 
   );  
 }
 
@@ -131,7 +135,30 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   // Surface these variables in taxreceipt.tpl.php:
   $variables['taxpayer_stories'] = $taxpayer_stories;
   $variables['line_items'] = $line_items;
-  $variables['form'] = drupal_get_form('taxreceipt_payment_form');
+}
+
+/**
+ * Implements hook_preprocess_hook().
+ */
+function taxreceipt_preprocess_taxreceipt_payment($variables) {
+  $path = drupal_get_path('module', 'taxreceipt');
+
+  // TODO These are all added during taxreceipt_preprocess_taxreceipt(),
+  //   eliminate anything that's unnecessary for supporting a stand alone form.
+  drupal_add_js($path . '/js/jquery-1.4.4.min.js');
+  drupal_add_js($path . '/js/jquery.bt.min.js');
+  drupal_add_js($path . '/js/jquery.hoverIntent.min.js');
+  drupal_add_js($path . '/js/receipt.js');
+  // drupal_add_js($path . '/js/highcharts.src.js');
+  // drupal_add_js($path . '/js/chart.js');
+  drupal_add_css($path . '/css/receipt.css');
+  drupal_add_css($path . 'css/receipt-print.css');
+
+  // Get tax payment form.
+  $payment_form = drupal_get_form('taxreceipt_payment_form');
+
+  // Surface these variables in taxreceipt-payment-form.tpl.php:
+  $variables['payment_form'] = $payment_form;
 }
 
 /**
