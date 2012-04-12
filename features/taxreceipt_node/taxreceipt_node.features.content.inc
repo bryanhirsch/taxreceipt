@@ -59,7 +59,7 @@ National Defense -- 24.9%<br/>
 Or: <br/>
 National Defense -- Spending on military personnel, operations, procurement and other activities critical to our national defense. (Corresponds to budget function 050) -- 24.9%<br/>
 <br/>
-Sub-categories of any particular line item can be included like this:<br/>
+Sub-categories of any particular line item can be included like this, with an asterisk (*) in front:<br/>
 *Parent line item name  -- line item name -- (optional) description -- percentage<br/>
 <br/>
 For example:<br/>
