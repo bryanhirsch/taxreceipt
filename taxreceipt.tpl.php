@@ -136,7 +136,8 @@
 <div id="taxr-tabset">
 	<div id="taxr-calculate" class="taxr-tab">
 
-    <?php print theme('taxreceipt_payment', NULL); ?>
+    <?php //print theme('taxreceipt_payment', NULL); ?>
+    <?php print $payment_form; ?>
 
 		<div class="taxr-top-row-first">
 			<div id="taxr-bluea">PROGRAMS & SERVICES</div><div id="taxr-blueb">YOUR TAX PAYMENT</div>

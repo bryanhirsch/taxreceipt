@@ -39,8 +39,7 @@ function taxreceipt_form_alter(&$form, &$form_state, $form_id) {
  *  Array. Form.
  */
 function taxreceipt_payment_form() {
-  $form = array(); 
-
+  $form['#theme'] = 'taxreceipt_payment';
   $form['ss'] = array(
     '#title' => t('Social Security Tax'),
     '#type' => 'textfield',
@@ -63,6 +62,14 @@ function taxreceipt_payment_form() {
 }
 
 /**
+ * Theme taxreceipt_payment_form.
+ */
+function theme_taxreceipt_payment($form) {
+  dsm($form, 'theme_taxreceipt_payment $form');  
+}
+
+
+/**
  * Implements hook_theme().
  */
 function taxreceipt_theme() {
@@ -81,7 +88,6 @@ function taxreceipt_theme() {
     ), 
     'taxreceipt_payment' => array(
       'arguments' => array('form' => NULL),
-      // 'template' => 'taxreceipt-payment',
     ), 
   );  
 }
@@ -132,32 +138,12 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   $taxpayer_stories = _taxreceipt_process_taxpayer_stories($node);
   $line_items = _taxreceipt_process_line_items($node);
 
+  // Get taxreceipt_payment_form.
+  $payment_form = drupal_get_form('taxreceipt_payment_form');
+
   // Surface these variables in taxreceipt.tpl.php:
   $variables['taxpayer_stories'] = $taxpayer_stories;
   $variables['line_items'] = $line_items;
-}
-
-/**
- * Implements hook_preprocess_hook().
- */
-function taxreceipt_preprocess_taxreceipt_payment($variables) {
-  $path = drupal_get_path('module', 'taxreceipt');
-
-  // TODO These are all added during taxreceipt_preprocess_taxreceipt(),
-  //   eliminate anything that's unnecessary for supporting a stand alone form.
-  drupal_add_js($path . '/js/jquery-1.4.4.min.js');
-  drupal_add_js($path . '/js/jquery.bt.min.js');
-  drupal_add_js($path . '/js/jquery.hoverIntent.min.js');
-  drupal_add_js($path . '/js/receipt.js');
-  // drupal_add_js($path . '/js/highcharts.src.js');
-  // drupal_add_js($path . '/js/chart.js');
-  drupal_add_css($path . '/css/receipt.css');
-  drupal_add_css($path . 'css/receipt-print.css');
-
-  // Get tax payment form.
-  $payment_form = drupal_get_form('taxreceipt_payment_form');
-
-  // Surface these variables in taxreceipt-payment-form.tpl.php:
   $variables['payment_form'] = $payment_form;
 }
 
