@@ -11,6 +11,8 @@
  *  - $logged_in
  *  - $db_is_active
  *  - $zebra
+ *
+ *  - $form, taxreceipt_payment_form
  * 
  *  - $taxpayer_stories, array including:
  *     $taxpayer_stories[$machine_name]['title'] = '$80,000 income — married with two children';
@@ -129,6 +131,9 @@
   <hr class="subtitle-rule" />
   <div class="subtitle">Understand how and where your tax dollars are being spent</div>
 </div>
+
+<?php print $form; ?>
+
 <div id="taxr-tabset">
 	<div id="taxr-calculate" class="taxr-tab">
 		<div id="taxr-calculate-form-top">

@@ -24,6 +24,45 @@ function taxreceipt_menu() {
 }
 
 /**
+ *
+ */
+/*
+function taxreceipt_form_alter(&$form, &$form_state, $form_id) {
+  dsm($form_id);  
+}
+// */
+
+/**
+ * Tax receipt form for user defined tax information.
+ * 
+ * @return
+ *  Array. Form.
+ */
+function taxreceipt_payment_form() {
+  $form = array(); 
+
+  $form['ss'] = array(
+    '#title' => t('Social Security Tax'),
+    '#type' => 'textfield',
+  );
+  $form['medicare'] = array(
+    '#title' => t('Medicare Tax'),
+    '#type' => 'textfield',
+  );
+  $form['income'] = array(
+    '#title' => t('Income Tax'),
+    '#type' => 'textfield',
+  );
+  $form['submit'] = array(
+    '#title' => t('Income Tax'),
+    '#type' => 'submit',
+    '#value' => 'Calculate your receipt',
+  );
+
+  return $form;
+}
+
+/**
  * Implements hook_theme().
  */
 function taxreceipt_theme() {
@@ -92,6 +131,7 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   // Surface these variables in taxreceipt.tpl.php:
   $variables['taxpayer_stories'] = $taxpayer_stories;
   $variables['line_items'] = $line_items;
+  $variables['form'] = drupal_get_form('taxreceipt_payment_form');
 }
 
 /**
