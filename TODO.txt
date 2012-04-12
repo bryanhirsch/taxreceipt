@@ -1,0 +1,3 @@
+TODOs 
+
+Add validation function on taxreceipt node save. Prevent subcategories without parents.
