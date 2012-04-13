@@ -32,9 +32,13 @@ function taxreceipt_theme() {
       'arguments' => array('node' => NULL),
       'template' => 'taxreceipt',
     ), 
-    'taxreceipt-line-item' => array(
+    'taxreceipt_line_item' => array(
       'arguments' => array('line_item' => NULL),
       'template' => 'taxreceipt-line-item',
+    ), 
+    'taxreceipt_taxpayer_story' => array(
+      'arguments' => array('line_item' => NULL),
+      'template' => 'taxreceipt-taxpayer-story',
     ), 
   );  
 }
@@ -68,6 +72,7 @@ function taxreceipt_page($node) {
  */
 function taxreceipt_preprocess_taxreceipt($variables) {
   $path = drupal_get_path('module', 'taxreceipt');
+  $node = $variables['node'];
 
   drupal_add_js($path . '/js/jquery-1.4.4.min.js');
   drupal_add_js($path . '/js/jquery.bt.min.js');
@@ -78,11 +83,13 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   drupal_add_css($path . '/css/receipt.css');
   drupal_add_css($path . 'css/receipt-print.css');
 
-  // Get tax receipt line items from taxreceipt node, field_taxreceipt_line_item field.
-  $node = $variables['node'];
+  // Get taxpayer stories and line items from corresponding 
+  // taxreceipt node fields.
+  $taxpayer_stories = _taxreceipt_process_taxpayer_stories($node);
   $line_items = _taxreceipt_process_line_items($node);
 
   // Surface these variables in taxreceipt.tpl.php:
+  $variables['taxpayer_stories'] = $taxpayer_stories;
   $variables['line_items'] = $line_items;
 }
 
@@ -98,6 +105,67 @@ function taxreceipt_preprocess_taxreceipt($variables) {
 function taxreceipt_line_item_is_subcategory($line_item) {
   $is_subcategory = (substr($line_item, 0, 1) == '*') ? TRUE : FALSE; 
   return $is_subcategory;
+}
+
+/**
+ * Pull taxpayer stories out of $node object and organize into a more useful array.
+ *
+ * @param $node
+ *  Object.
+ * 
+ * @return $taxpayer_stories
+ *  Associative array. 
+ */
+function _taxreceipt_process_taxpayer_stories($node) {
+  if(empty($node->field_taxreceipt_taxpayer_story)) {
+    return FALSE; 
+  }
+
+  $taxpayer_stories = array();
+  $stories = $node->field_taxreceipt_taxpayer_story;
+
+  foreach ($stories as $story) {
+    $story = _taxreceipt_process_taxpayer_story(check_plain($story['value']));
+    $machine_name = _taxreceipt_machine_name($story['title']);
+    $taxpayer_stories[$machine_name] = $story;
+  }
+  
+  return $taxpayer_stories;
+}
+
+/**
+ * @param $story
+ *  String. e.g. 
+ *     title: $80,000 income — married with two children
+ *     description: This assumes this family contributes 5 percent 
+ *     of their wage income to a 401(k) or IRA, does not itemize, 
+ *     and claims the Making Work Pay and Child Tax Credits.
+ *     income: $80,000
+ *     social security tax: 4.2%
+ *     medicare tax: 1.45%
+ *     income tax: 5.7375%
+ * 
+ * @return $story
+ *  Array.
+ *     $story['title'] = '$80,000 income — married with two children';
+ *     $story['description'] = 'This assumes this family contributes 5 percent ';
+ *     $story['income'] = '$80,000';
+ *     $story['social security tax'] = '4.2%';
+ *     $story['medicare tax'] = '1.45%';
+ *     $story['income tax'] = '5.7375%';
+ */
+function _taxreceipt_process_taxpayer_story($story) {  
+  $parts1 = explode("\n", $story);
+  $story = array();
+
+  foreach ($parts1 as $part) {
+     $parts2 = explode(':', $part);
+     $key = trim($parts2[0]);
+     $value = trim($parts2[1]);
+     $story[$key] = $value;
+  }
+
+  return $story;
 }
 
 /**
