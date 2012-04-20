@@ -32,9 +32,92 @@
  * TODO?...
  *  - $date
  *  - $city
+ *
+ * @info
+ *
+ * Inside categories you have sub-categories. Inside each sub-category you have rows.
+ *
+ * A category is defined by <div id="taxr-cat-head-XXX">
+ * A sub-category (also known as the content of the category)
+ *  is defined as a consecutive-non-nested div by <div id="taxr-cat-content-XXX" class="taxr-cat-sub">
+ *  where XXX in the category and the sub-category are the same.
+ *
+ * A category's data is a single nested row like this:
+ *   <div id="taxr-cat-head-XXX">
+ *     <div class="taxr-row"></div>
+ *   </div>
+ *
+ * A subcategories data is between 1 and N rows like this:
+ *   <div id="taxr-cat-content-XXX" class="taxr-cat-sub">
+ *     <div class="taxr-row"></div>
+ *     <div class="taxr-row"></div>
+ *     <div class="taxr-row"></div>
+ *     ...N
+ *   </div>
+ *
+ * A row is declared the exact same weather in a category or subcategory and has 3 columns. Declared As:
+ *   <div class="taxr-row">
+ *     <div class="taxr-col1"></div>
+ *     <div class="taxr-col2"></div>
+ *     <div class="taxr-col3"></div>
+ *   </div>
+ *
+ * There are 3 types of data a column can hold -
+ *   A description - Contains a link title for the hover state and a tool-tip style long description.
+ *   A Percentage - Display only.
+ *   A calculated value - A div which contains a special field named data-percent which has a value of the
+ *     percentage to be calculated against the total.
+ *
+ * Descriptions are declared as -
+ *  <div class="taxr-col1">
+ *    <a href="javascript:;"
+ *      id="taxr-info-cat-XXX"
+ *      title=""
+ *      bt-xtitle="Long Description Tool-Tip"
+ *      class="">
+ *      Link Title for Hover State
+ *    </a>
+ *  </div>
+ *
+ * Percentage declared as -
+ *   <div class="taxr-col2">
+ *    5.8%
+ *   </div>
+ *
+ * Calculated Value Declared as -
+ *   <div class="taxr-col3">
+ *     <div id="taxr-data-percent-XXX" data-percent="5.8">$0</div>
+ *   </div>
+ *
+ *
+ * A Full example of a category with several subcategories would look like this:
+ *
+ * <div id="taxr-categories">
+ *   <div id="taxr-cat-head-defense" class="odd">
+ *     <div class="taxr-row">
+ *       <div class="taxr-col1">
+ *         <a href="javascript:;" id="taxr-info-cat-defense" class="underline2"
+ *           title="Spending on military personnel, operations to our national defense.">
+ *           National Defense
+ *         </a>
+ *       </div>
+ *       <div class="taxr-col2">24.9%</div>
+ *       <div class="taxr-col3">
+ *         <div id="taxr-data-percent-defense" data-percent="24.9">$0</div>
+ *       </div>
+ *     </div>
+ *   </div> <!-- End Category Head -->
+ *   <div id="taxr-cat-content-defense" class="taxr-cat-sub"> <!-- Begin Subcategories (content) -->
+ *       <div class="taxr-row">..See Row Above..</div>
+ *       <div class="taxr-row">..See Row Above..</div>
+ *       <div class="taxr-row">..See Row Above..</div>
+ *       <div class="taxr-row">..See Row Above..</div>
+ *   </div> <!-- End Subcategories -->
+ * </div>
+ *
  */
 ?>
-<body id="taxr-page">
+<div id="taxr-page">
 <div id="taxr-header">
   <div class="taxr-info">
     <div class="city">Washington, DC</div>
@@ -114,12 +197,11 @@
 			<div id="taxr-cola" class="taxr-total-label">TOTAL INCOME AND PAYROLL TAXES YOU PAID</div>
 			<div id="taxr-colb"><div id="taxr-data-totaltax"></div></div>
 		</div>
-		<div id="taxr-nav-numbers"><a class="numbers-link" href="#taxr-numbers">Learn more about the numbers</a></div>
-		<!--share links-->
-    <div id="taxr-social-links">
-    		<a href="http://www.facebook.com/share.php?s=100&amp;p[title]=Your 2011 Federal Taxpayer Receipt&amp;p[url]=http://www.whitehouse.gov/2011-taxreceipt&amp;p[images][0]= http://www.whitehouse.gov/sites/default/files/calulator_fb_share.jpg" target="_blank"><img src="http://www.whitehouse.gov/files/taxreceipt/images/receipt_facebook_btn.png"></a>&nbsp;&nbsp;<a href="http://twitter.com/home/?status=Understand%20where%20your%20federal%20tax%20dollars%20are%20being%20spent%20with%20the%20White%20House%20tax%20receipt%20tool%3A%20http%3A//wh.gov/tax-receipt%20via%20@whitehouse" target="_blank"><img src="http://www.whitehouse.gov/files/taxreceipt/images/receipt_twitter_btn.png"></a>
-    	</div>
-		  <div id="taxr-print-link"></div>
+		<div class ="print-wrap clearfix">
+  		<div id="taxr-nav-numbers"><a class="numbers-link" href="#taxr-numbers">Learn more about the numbers</a></div>
+  		<!--share links-->
+  		  <div id="taxr-print-link"></div>
+		</div>
     	<!--end share links -->
 	</div>
 	<div id="taxr-numbers" class="taxr-tab">
@@ -140,27 +222,10 @@
 		<p>The categories on the tax receipt are based on how the federal budget is organized. The budget is organized into 19 major functions according to the major purpose the spending serves &mdash; such as agriculture or national defense.  Within these functions are more specific sub-functions. For example, in the Education, Training, Employment, and Social Services function, there are several sub-functions, including Higher Education. The full list of functions and sub-functions is <a href="http://www.whitehouse.gov/tax-receipt/functions" target="_blank">available here</a>.</p>
 	<!--share links-->
 	<div id="taxr-nav-numbers" class="taxr-tab-active"><a class="calculate-button2" href="#taxr-numbers">Calculate your receipt</a></div>
-  <div id="taxr-social-links">
-    		<a href="http://www.facebook.com/share.php?s=100&amp;p[title]=Your 2011 Federal Taxpayer Receipt&amp;p[url]=http://www.whitehouse.gov/2011-taxreceipt&amp;p[images][0]= http://www.whitehouse.gov/sites/default/files/calulator_fb_share.jpg" target="_blank"><img src="http://www.whitehouse.gov/files/taxreceipt/images/receipt_facebook_btn.png"></a>&nbsp;&nbsp;<a href="http://twitter.com/home/?status=Understand%20where%20your%20federal%20tax%20dollars%20are%20being%20spent%20with%20the%20White%20House%20tax%20receipt%20tool%3A%20http%3A//wh.gov/tax-receipt%20via%20@whitehouse" target="_blank"><img src="http://www.whitehouse.gov/files/taxreceipt/images/receipt_twitter_btn.png"></a>
-  </div>
   <div id="taxr-print-link"></div>
 	<!--share links-->
-	</div>
-	<div id="taxr-footer-links" class="clearfix">
-		<div id="taxr-footer-list">
-		  <div class="buffet-links">
-		  <div class="buffett-upper"></div>
-		  <div class="buffett-left">DID YOU KNOW?<br />1,470 people who made more than $1 million in 2009 paid $0 in federal income taxes.</div>
-		  <a class="buffett-right" href="http://www.whitehouse.gov/economy/buffett-rule" target="_blank">The Buffett rule will ensure everyone pays their fair share. Learn More...</a>
-		  <div class="buffett-lower"></div>
-		  </div>
-			<div id="taxr-footer-link-list" style="padding: 0 8px 0 0; border-right: 1px solid #333;"><a target="_blank" class="underline" href="http://www.whitehouse.gov/get-email-updates">Sign up for email updates from the White House</a></div>
-			
-			<div id="taxr-footer-link-list" style="padding-left: 8px;"><a href="http://www.whitehouse.gov/tax-receipt/feedback" target="_blank" class="underline">Share your thoughts on this receipt</a></div>
-      <a id="taxr-embedbox-link" href="javascript:;" data-embed="<p>Copy this code to embed the taxpayer receipt tool on your website:</p><textarea rows='5' cols='30'><iframe scrolling='no' frameborder='0' height='2150' width='700' src='http://www.whitehouse.gov/files/taxreceipt2012/index.html' target='_blank'></iframe></textarea>">Embed the Taxpayer Receipt Tool on Your Own Website</a>
-		</div>
 	</div>
 </div><!-- end #taxr-tabset -->
   <div id="taxr-footer">
   </div><!-- end #taxr-footer -->
-</body>
+</div>
