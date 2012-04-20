@@ -78,7 +78,7 @@
 
 			<div id="taxr-range-select">
 
-          <?php foreach ($taxpayer_stories as $story) { print theme('taxreceipt_taxpayer_story', $story); } ?> 
+          <?php foreach ($taxpayer_stories as $taxpayer_story) { print theme('taxreceipt_taxpayer_story', $taxpayer_story); } ?> 
 
 			</div>
 		</div>
