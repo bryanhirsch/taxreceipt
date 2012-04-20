@@ -37,7 +37,7 @@ function taxreceipt_theme() {
       'template' => 'taxreceipt-line-item',
     ), 
     'taxreceipt_taxpayer_story' => array(
-      'arguments' => array('line_item' => NULL),
+      'arguments' => array('taxpayer_story' => NULL),
       'template' => 'taxreceipt-taxpayer-story',
     ), 
   );  
@@ -134,6 +134,116 @@ function _taxreceipt_process_taxpayer_stories($node) {
 }
 
 /**
+ * @param $tax
+ *  String
+ * 
+ * @param $income
+ *  String
+ * 
+ * @return $amount
+ *   Integer 
+ */
+function _taxreceipt_process_taxpayer_story_data($tax, $income = 0) {
+  // Figure out $type: dollars, percent, decimal and remove special
+  // characters ($ and %).
+  $type = '';
+  $rate = '';
+  if (strpbrk($tax, '$')) {
+    $type = 'dollars';
+    $tax = substr($tax, 1); // @todo Assumes $ sign is in position 0.
+  }
+  else if (strpbrk($tax, '%') && $income) {
+    $type = 'percent';
+    $tax = substr($tax, 0, -1); // @todo Assumes % sign is in last position.
+  }
+  // Assume numbers like 4.2 mean 4.2%.
+  else if (is_numeric($tax) && $tax >= 1) {
+    $type = 'percent';
+  }
+  // Decimal is something like this: .42 or 0.42
+  else if (is_numeric($tax) && $tax < 1) {
+    $type = 'decimal';
+  }
+  else {
+    $text = t('Sorry. Tax Receipt module is confused about what to do with this: !tax. Please contact an administrator.', array('!tax' => $tax));
+    watchdog('taxreceipt', $text);
+    drupal_set_message($text, 'warning');  
+  }
+
+  // Get tax $rate.
+  if ($type == 'dollars') {
+    $rate = 'flat tax';
+  }
+  else if ($type == 'percent') {
+    // Convert to decimal.
+    $rate = $tax / 100;
+  }
+  else if ($type == 'decimal') {
+    $rate = $tax;
+  }
+  else {
+    $text = t('Sorry. Tax Receipt module is confused about how to calculate the tax rate here: !tax. Please contact an administrator.', array('!tax' => $tax));
+    watchdog('taxreceipt', $text);
+    drupal_set_message($text, 'warning');  
+  }
+
+  // Get tax amount.
+  if ($rate == 'flat tax') {
+    $amount = $tax;
+  }
+  else if ($income) {
+    $amount = $rate * $income;
+  }
+  else {
+    $text = t('Sorry. Tax Receipt cannot calculate tax here without knowing a corresponding income amount: !tax. Please contact an administrator.', array('!tax' => $tax));
+    watchdog('taxreceipt', $text);
+    drupal_set_message($text, 'warning');  
+  }
+
+  // Return tax amount as integer.
+  return round($amount);
+}
+
+/**
+ * Convert numbers like: $20 000 and 20,000 to 20000.
+ * 
+ * @param $dollars
+ *  String
+ * 
+ * @return $number
+ *  Integer
+ */
+function taxreceipt_dollars_to_number($dollars) {
+  $number = '';
+
+  // Strip $ symbol.
+  if (strpbrk($dollars, '$')) {
+    $number = substr($dollars, 1); // @todo Assumes $ sign is in position 0.
+  }
+  else {
+    // @todo Handle other currencies.
+    $number = $dollars;  
+  }
+
+  // Strip spaces and commas.
+  if (strpbrk($number, ' ')) {
+    $parts = explode(' ', $number);
+  }
+  else if (strpbrk($number, ',')) {
+    $parts = explode(',', $number);
+  }
+  // If there's more than 1 part, there were spaces or commas.
+  if (count($parts) > 1) {
+    $number = '';
+    foreach ($parts as $part) {
+      $number .= $part;  
+    }
+  }
+  
+  return round($number);
+}
+
+/**
  * @param $story
  *  String. e.g. 
  *     title: $80,000 income — married with two children
@@ -148,6 +258,7 @@ function _taxreceipt_process_taxpayer_stories($node) {
  * @return $story
  *  Array.
  *     $story['title'] = '$80,000 income — married with two children';
+ *     $story['machine_name'] = '-80-000-income-married-with-two-children';
  *     $story['description'] = 'This assumes this family contributes 5 percent ';
  *     $story['income'] = '$80,000';
  *     $story['social security tax'] = '4.2%';
@@ -164,6 +275,14 @@ function _taxreceipt_process_taxpayer_story($story) {
      $value = trim($parts2[1]);
      $story[$key] = $value;
   }
+
+  $income = taxreceipt_dollars_to_number(trim($story['income']));
+
+  $story['machine_name'] = _taxreceipt_machine_name($story['title']); 
+  $story['data-socsec'] = _taxreceipt_process_taxpayer_story_data($story['social security tax'], $income);
+  $story['data-medicare'] = _taxreceipt_process_taxpayer_story_data($story['medicare tax'], $income);
+  $story['data-income'] = _taxreceipt_process_taxpayer_story_data($story['income tax'], $income);
+
 
   return $story;
 }
