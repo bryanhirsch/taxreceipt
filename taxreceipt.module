@@ -74,14 +74,15 @@ function taxreceipt_preprocess_taxreceipt($variables) {
   $path = drupal_get_path('module', 'taxreceipt');
   $node = $variables['node'];
 
-  drupal_add_js($path . '/js/jquery-1.4.4.min.js');
-  drupal_add_js($path . '/js/jquery.bt.min.js');
+  drupal_add_js(drupal_get_path('module', 'beautytips') . '/js/jquery.bt.min.js');
+  
   drupal_add_js($path . '/js/jquery.hoverIntent.min.js');
   drupal_add_js($path . '/js/receipt.js');
   // drupal_add_js($path . '/js/highcharts.src.js');
   // drupal_add_js($path . '/js/chart.js');
   drupal_add_css($path . '/css/receipt.css');
   drupal_add_css($path . 'css/receipt-print.css');
+  drupal_add_css(drupal_get_path('module', 'beautytips') . '/css/beautytips.css');
 
   // Get taxpayer stories and line items from corresponding 
   // taxreceipt node fields.

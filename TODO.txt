@@ -1,3 +1,5 @@
 TODOs 
 
-Add validation function on taxreceipt node save. Prevent subcategories without parents.
+[ ] Add validation function on taxreceipt node save. Prevent subcategories without parents.
+[ ] Add Beauty Tips module as a dependency.
+[ ] High Charts needs to be seperated out. Licensing.
