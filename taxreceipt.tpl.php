@@ -139,6 +139,16 @@
     <?php //print theme('taxreceipt_payment', NULL); ?>
     <?php print $payment_form; ?>
 
+    <div id="taxr-calculate-range-container"> 
+      <div id="taxr-range-row" class="clearfix">
+        <div id="taxr-range-toggle"></div>
+      </div>
+    <div id="taxr-range-select">
+
+          <?php foreach ($taxpayer_stories as $taxpayer_story) { print theme('taxreceipt_taxpayer_story', $taxpayer_story); } ?> 
+
+			</div>
+		</div>
 		<div class="taxr-top-row-first">
 			<div id="taxr-bluea">PROGRAMS & SERVICES</div><div id="taxr-blueb">YOUR TAX PAYMENT</div>
 		</div>
