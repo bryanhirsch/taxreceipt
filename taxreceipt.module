@@ -62,7 +62,7 @@ function taxreceipt_payment_form() {
     $form[$machine_name] = array(
       '#title' => t($human_name),
       '#type' => 'textfield',
-      '#attributes' => array($machine_name => '800'),
+      '#attributes' => array("data-attribute-$machine_name" => '800'),
     );
   }
 
