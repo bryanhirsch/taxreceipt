@@ -72,7 +72,7 @@ $(document).ready(function(){
 				$(this).css("border","0px");
 			}
 		});
-	$("#taxr-calculate-button")
+	$(".tax-submit")
 		.bt({
 			trigger: ['none'],
 			fill: 'white',
@@ -206,7 +206,7 @@ $(document).ready(function(){
 				$("input[name=taxr-input-socsec]").val($(this).attr("data-socsec"));
 				$("input[name=taxr-input-medicare]").val($(this).attr("data-medicare"));
 				$("input[name=taxr-input-income]").val($(this).attr("data-income"));
-				$("#taxr-calculate-button").click();
+				$(".tax-submit").click();
 				$("#taxr-range-toggle").btOff();
 			});
 		}

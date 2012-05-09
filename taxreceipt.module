@@ -67,17 +67,16 @@ function taxreceipt_payment_form() {
   }
 
   // TODO make button a real button in its own element.
-  /*
+
   $form['submit'] = array(
-    '#title' => t('Income Tax'),
+    '#title' => t('Submit'),
     '#type' => 'submit',
     '#value' => 'Calculate your receipt',
+    '#attributes' => array('class' => 'tax-submit'),
   );
-  // */
 
   return $form;
 }
-
 /**
  * Theme taxreceipt_payment_form.
  */
