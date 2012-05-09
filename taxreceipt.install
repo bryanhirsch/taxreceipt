@@ -6,9 +6,8 @@
 /**
  * Implements hook_uninstall().
  */
+/*
 function taxreceipt_install() {
-  $tax_categories = taxreceipt_default_tax_categories();
-  variable_set('taxreceipt_tax_categories', $tax_categories);
 }
 
 /**
