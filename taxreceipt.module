@@ -68,6 +68,22 @@ function taxreceipt_payment_form() {
 
   // TODO make button a real button in its own element.
 
+  $form['taxr-input-socsec'] = array(
+    '#title' => t('Social Security Tax'),
+    '#type' => 'textfield',
+    '#attributes' => array('name' => 'taxr-input-socsec' , 'data-socsec' => '1000'),
+  );
+  $form['taxr-input-medicare'] = array(
+    '#title' => t('Medicare Tax'),
+    '#type' => 'textfield',
+    '#attributes' => array('data-medicare' => '800'),
+  );
+  $form['taxr-input-income'] = array(
+    '#title' => t('Income Tax'),
+    '#type' => 'textfield',
+    '#attributes' => array('data-income' => '500'),
+  );
+  
   $form['submit'] = array(
     '#title' => t('Submit'),
     '#type' => 'submit',
