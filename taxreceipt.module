@@ -55,6 +55,7 @@ function taxreceipt_form_alter(&$form, &$form_state, $form_id) {
  */
 function taxreceipt_payment_form() {
   $form['#theme'] = 'taxreceipt_payment';
+<<<<<<< Updated upstream
 
   $tax_categories = taxreceipt_get_tax_categories();
 
