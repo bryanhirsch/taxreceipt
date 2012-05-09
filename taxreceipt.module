@@ -41,11 +41,46 @@ function taxreceipt_perm() {
 /**
  *
  */
-/*
 function taxreceipt_form_alter(&$form, &$form_state, $form_id) {
-  dsm($form_id);  
+  if ($form_id == 'taxreceipt_node_form') {
+    $form['field_taxreceipt_taxpayer_story']['#description'] = _taxreceipt_field_taxreceipt_taxpayer_story_description();
+  }
 }
-// */
+
+/**
+ * @return
+ *  HTML. Return description for field_taxreceipt_taxpayer_story on taxreceipt node.
+ *  This should probably be a legit theme function. But what we're doing here, is really just altering a
+ *  description field stored in a feature module. So, unclear what the best practice in a weird case like
+ *  this is. Not sure a theme function adds much. Unclear if this should be overridable. 
+ */
+function _taxreceipt_field_taxreceipt_taxpayer_story_description() {
+  $output = '';
+  $tax_categories = taxreceipt_get_tax_categories();
+
+  $output = 
+    "<p>A taxpayer story describes a specific taxpayer's situation, then auto completes the 'Calculate your receipt' form. Please provide the following information:</p>
+
+    <p>title:<br />
+    description:<br />
+    income:<br />";
+  foreach ($tax_categories as $machine_name => $human_name) {
+    $output .= $machine_name . ':<br />';
+  }
+    
+  $output .=  "<p>For example:</p>
+
+    <p>title: $80,000 income — married with two children<br />
+    description: This assumes this family contributes 5 percent of their wage income to a 401(k) or IRA, does not itemize, and claims the Making Work Pay and Child Tax Credits.<br />
+    income: $80,000<br />";
+  $i = 1;
+  foreach ($tax_categories as $machine_name => $human_name) {
+    $output .= $machine_name . ": $i.$i%<br />";
+    $i++;
+  }
+
+  return $output; 
+}
 
 /**
  * Tax receipt form for user defined tax information.

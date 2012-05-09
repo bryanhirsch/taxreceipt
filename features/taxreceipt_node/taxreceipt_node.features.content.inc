@@ -117,23 +117,8 @@ For example:<br/>
       'default_value_php' => NULL,
       'label' => 'Taxpayer story',
       'weight' => '3',
-      'description' => '<p>A taxpayer story describes a specific taxpayer\'s situation, then auto completes the \'Calculate your receipt\' form. Please provide the following information:</p>
-
-<p>title:<br/>
-description:<br/>
-income:<br/>
-social security tax:<br/>
-medicare tax:<br/>
-income tax:</p>
-
-<p>For example:</p>
-
-<p>title: $80,000 income — married with two children<br/>
-description: This assumes this family contributes 5 percent of their wage income to a 401(k) or IRA, does not itemize, and claims the Making Work Pay and Child Tax Credits.<br/>
-income: $80,000<br/>
-social security tax: 4.2%<br/>
-medicare tax: 1.45%<br/>
-income tax: 5.7375%</p>',
+      'description' => '
+NOTE: THIS DESCRIPTION WILL NOT SHOW UP ON NODE FORMS. IT\'S DEFINED PROGRAMMATICALLY BY TAXRECEIPT MODULE. ',
       'type' => 'text_textarea',
       'module' => 'text',
     ),
