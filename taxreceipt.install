@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file taxreceipt.install
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function taxreceipt_install() {
+  $tax_categories = taxreceipt_default_tax_categories();
+  variable_set('taxreceipt_tax_categories', $tax_categories);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function taxreceipt_uninstall() {
+  // Delete taxreceipt variables stored in variables table.
+  $variables = array(
+    'taxreceipt_tax_categories',
+  );
+  foreach ($variables as $variable) {
+    variable_del($variable);  
+  }
+}
